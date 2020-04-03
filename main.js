@@ -18,6 +18,7 @@ client.on('message', message=> {
         message.channel.send(`Your user name: ${message.author.username}\nYour ID: ${message.author.id}`);
     }
     else if(message.content === `${prefix}close`) {
+        message.channel.send(`\`\`\`Closing..\`\`\``);
         process.exit();
     }
 });
