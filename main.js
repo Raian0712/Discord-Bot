@@ -12,10 +12,10 @@ client.on('message', message=> {
     if (!message.content.startsWith(prefix) || message.author.bot) return;
 
     if (message.content === `${prefix}ping`) {
-        message.channel.send('pong');
+        message.channel.send('\`\`\`pong\`\`\`');
     }
     else if(message.content === `${prefix}user`) {
-        message.channel.send(`Your user name: ${message.author.username}\nYour ID: ${message.author.id}`);
+        message.channel.send(`\`\`\`Your user name: ${message.author.username}\nYour ID: ${message.author.id}\`\`\``);
     }
     else if(message.content === `${prefix}close`) {
         message.channel.send(`\`\`\`Closing..\`\`\``);
