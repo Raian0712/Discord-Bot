@@ -1,0 +1,15 @@
+{
+    "name": "Test Bot",
+    "description": "Just a test bot",
+    "version": "1.0.0",
+    "main": "main.js",
+    "scripts": {
+        "start": "node bot.js"
+    },
+    "dependecies": {
+        "discord.js": "12.1.1",
+        "request": "2.81.0"
+    },
+    "prefix": "!",
+    "token": "MzcwNTYzNTk2NTE1ODAzMTY3.XodSxw.p6uJg5_5fF7OoImc3oS4LXjqWW8"
+}
