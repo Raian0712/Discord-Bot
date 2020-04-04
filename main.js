@@ -11,6 +11,7 @@ client.on('message', message=> {
     console.log(message.content);
     const args = message.content.split(" ").slice(1);
     console.log(args);
+    console.log("OwnerID = " + ownerID);
 
     if (!message.content.startsWith(prefix) || message.author.bot) return;
 
