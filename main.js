@@ -41,51 +41,6 @@ client.on('message', async (message)=> {
     } catch (error) {
         message.channel.send(`\`ERROR\` \`\`\`xl\n${error}\n\`\`\``);
     }
-
-	/*if (message.content.startsWith(prefix + 'ping')) {
-		client.commands.get('ping').execute(message, args);
-	} else if (message.content.startsWith(prefix + 'user')) {
-		message.channel.send(`\`\`\`Your user name: ${message.author.username}\nYour ID: ${message.author.id}\`\`\``);
-	} else if (message.content.startsWith(prefix + 'close')) {
-		message.channel.send(`\`\`\`Closing..\`\`\``);
-		process.exit();
-	} else if (message.content.startsWith(prefix + 'code')) {
-		if (message.author.id !== ownerID) return;
-		try {
-            const code = args.join(' ');
-            const console = {
-                embed: true,
-                image: '',
-                message: '',
-                code_block: true,
-                colour: 11395071,
-                title: 'Output:',
-                buffer: '',
-                log: (input) => console.buffer += (inspect(input) + '\n'),
-            };
-            let evaled;
-            let returned = await eval(`(async () => {${code}})()`);
-            const consoleEmbed = new Discord.MessageEmbed()
-                .setTitle(console.title)
-                .setColor(console.colour)
-                .setTimestamp()
-                .setDescription('```js\n' + `${(console.buffer)}` + '```')
-                .addFields(
-                    {name: 'Returned', value: returned},
-                );
-
-			if (typeof returned !== 'string') {
-				returned = inspect(returned);
-			}
-            // message.channel.send(clean(returned), {code: 'xl'});
-            message.channel.send(consoleEmbed);
-            // console.log('Output: ' + (clean(returned)));
-            console.buffer = '';
-		} catch (error) {
-            message.channel.send(`\`ERROR\` \`\`\`xl\n${clean(error)}\n\`\`\``);
-            console.buffer = '';
-		}
-	}*/
 });
 
-client.login(token);
+client.login(process.env.TOKEN);
