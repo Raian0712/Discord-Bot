@@ -9,13 +9,29 @@
 const Discord = require('discord.js');
 const {prefix, ownerID} = require('./config.json');
 const client = new Discord.Client();
-// const consoleEmbed = new Discord.MessageEmbed().setTitle('Console');
+const console = {
+    embed: true,
+    image: '',
+    message: '',
+    code_block: true,
+    colour: 11395071,
+    title: 'Output:',
+    buffer: '',
+    log: (input) => console.buffer += (input + '\n'),
+}
+const consoleEmbed = new Discord.MessageEmbed()
+    .setTitle('Output')
+    .setColor(console.colour)
+    .setTimestamp()
+    .addFields(
+        {name: 'Returned', value: (clean(evaled), {code: 'xl'})}
+    );
 
 client.on('ready', () => {
 	console.log(`Logged in as ${client.user.tag}!`);
 });
 
-client.on('message', (message)=> {
+client.on('message', async (message)=> {
 	const args = message.content.split(' ').slice(1);
 
 	if (!message.content.startsWith(prefix) || message.author.bot) return;
@@ -31,7 +47,7 @@ client.on('message', (message)=> {
 		if (message.author.id !== ownerID) return;
 		try {
 			const code = args.join(' ');
-			let evaled = eval(code);
+			let evaled = await eval(code);
 
 			// Run time
 			const hrStart = process.hrtime();
@@ -41,7 +57,8 @@ client.on('message', (message)=> {
 				evaled = require('util').inspect(evaled);
 			}
             message.channel.send(`*Executed in ${hrDiff[0] > 0 ? `${hrDiff[0]}s` : ''}${hrDiff[1] / 1000000}ms.*`)
-			message.channel.send(clean(evaled), {code: 'xl'});
+            // message.channel.send(clean(evaled), {code: 'xl'});
+            message.channel.send(consoleEmbed);
 		} catch (error) {
 			message.channel.send(`\`ERROR\` \`\`\`xl\n${clean(error)}\n\`\`\``);
 		}
