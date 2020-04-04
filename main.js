@@ -10,8 +10,6 @@ const Discord = require('discord.js');
 const {prefix, ownerID} = require('./config.json');
 const client = new Discord.Client();
 
-
-
 client.on('ready', () => {
 	console.log(`Logged in as ${client.user.tag}!`);
 });
@@ -42,7 +40,6 @@ client.on('message', async (message)=> {
                 buffer: '',
                 log: (input) => console.buffer += (input + '\n'),
             };
-            let evaled = await eval(code);
             const returned = await eval(`(async () => {${code}})()`);
             const consoleEmbed = new Discord.MessageEmbed()
                 .setTitle(console.title)
@@ -53,12 +50,12 @@ client.on('message', async (message)=> {
                     {name: 'Returned', value: returned},
                 );
 
-			if (typeof evaled !== 'string') {
-				evaled = require('util').inspect(evaled);
+			if (typeof returned !== 'string') {
+				returned = require('util').inspect(returned);
 			}
-            // message.channel.send(clean(evaled), {code: 'xl'});
+            // message.channel.send(clean(returned), {code: 'xl'});
             message.channel.send(consoleEmbed);
-            // console.log('Output: ' + (clean(evaled)));
+            // console.log('Output: ' + (clean(returned)));
             console.buffer = '';
 		} catch (error) {
             message.channel.send(`\`ERROR\` \`\`\`xl\n${clean(error)}\n\`\`\``);
