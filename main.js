@@ -48,7 +48,7 @@ client.on('message', async (message)=> {
                 .setTitle(console.title)
                 .setColor(console.colour)
                 .setTimestamp()
-                .setDescription(`\`\`\` ${(clean(evaled))} \`\`\``)
+                .setDescription(`\`\`\` js ${(console.buffer)} \`\`\``)
                 .addFields(
                     {name: 'Returned', value: returned},
                 );
@@ -68,7 +68,7 @@ client.on('message', async (message)=> {
 });
 
 /**
- * cleans text to code
+ * idk
  * @param {string} text
  * @return {string} output code
  */
