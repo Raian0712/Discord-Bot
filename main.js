@@ -18,7 +18,7 @@ const console = {
     title: 'Output:',
     buffer: '',
     log: (input) => console.buffer += (input + '\n'),
-}
+};
 
 
 client.on('ready', () => {
@@ -48,7 +48,7 @@ client.on('message', async (message)=> {
                 .setTimestamp()
                 .addFields(
                     {value: `\` ${clean(evaled)} \``},
-                    {name: 'Returned', value: ''}
+                    {name: 'Returned', value: 'test'},
                 );
 
 			// Run time
@@ -58,7 +58,7 @@ client.on('message', async (message)=> {
 			if (typeof evaled !== 'string') {
 				evaled = require('util').inspect(evaled);
 			}
-            message.channel.send(`*Executed in ${hrDiff[0] > 0 ? `${hrDiff[0]}s` : ''}${hrDiff[1] / 1000000}ms.*`)
+            message.channel.send(`*Executed in ${hrDiff[0] > 0 ? `${hrDiff[0]}s` : ''}${hrDiff[1] / 1000000}ms.*`);
             // message.channel.send(clean(evaled), {code: 'xl'});
             message.channel.send(consoleEmbed);
 		} catch (error) {
