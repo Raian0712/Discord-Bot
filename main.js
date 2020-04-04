@@ -15,22 +15,21 @@ client.on('message', message=> {
 
     if (!message.content.startsWith(prefix) || message.author.bot) return;
 
-    if (message.content === `${prefix}ping`) {
+    if (message.content.startsWith(prefix + ping)) {
         message.channel.send('\`\`\`pong\`\`\`');
     }
-    else if(message.content === `${prefix}user`) {
+    else if(message.content.startsWith(prefix + user)) {
         message.channel.send(`\`\`\`Your user name: ${message.author.username}\nYour ID: ${message.author.id}\`\`\``);
     }
-    else if(message.content === `${prefix}close`) {
+    else if(message.content.startsWith(prefix + close)) {
         message.channel.send(`\`\`\`Closing..\`\`\``);
         process.exit();
     }
-    else if(message.content === `${prefix}code`) {
+    else if(message.contentstartsWith(prefix + code)) {
         if (message.author.id !== ownerID) return;
-        console.log("code = " + args.join(" "));
         try {
             const code = args.join(" ");
-            
+            console.log("code = " + code);
             let evaled = eval(code);
 
             if(typeof evaled !== "string") {
