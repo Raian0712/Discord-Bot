@@ -8,7 +8,7 @@ module.exports = {
 	async execute(message, args) {
 		if (message.author.id !== ownerID) return;
 		try {
-            const code = args.join(' ');
+            const code = args.join(' ').replace(/^[ \n]+```(?:js|javascript)?\n([^]+)```$/, (found, code, index, input) => code);
             const console = {
                 embed: true,
                 image: '',
