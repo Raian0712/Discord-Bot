@@ -8,7 +8,7 @@
 
 const fs = require('fs');
 const Discord = require('discord.js');
-const {prefix} = require('./config.json');
+const {prefix, token} = require('./config.json');
 
 const client = new Discord.Client();
 client.commands = new Discord.Collection();
@@ -28,6 +28,7 @@ client.on('ready', () => {
 });
 
 client.on('message', async (message)=> {
+    //guild = message.guild;
     const args = message.content.split(' ').slice(1);
     const command = message.content.slice(prefix.length).split(/ +/).shift().toLowerCase();
 
@@ -38,7 +39,7 @@ client.on('message', async (message)=> {
     try {
         client.commands.get(command).execute(message, args);
     } catch (error) {
-        message.channel.send(`\`ERROR\` \`\`\`xl\n${clean(error)}\n\`\`\``);
+        message.channel.send(`\`ERROR\` \`\`\`xl\n${error}\n\`\`\``);
     }
 
 	/*if (message.content.startsWith(prefix + 'ping')) {
@@ -87,17 +88,4 @@ client.on('message', async (message)=> {
 	}*/
 });
 
-/**
- * idk
- * @param {string} text
- * @return {string} output code
- */
-function clean(text) {
-	if (typeof(text) === 'string') {
-		return text.replace(/`/g, '`' + String.fromCharCode(8203)).replace(/@/g, '@' + String.fromCharCode(8203));
-	} else {
-		return text;
-	}
-}
-
-client.login(process.env.TOKEN);
+client.login(token);

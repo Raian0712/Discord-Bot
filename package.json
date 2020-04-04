@@ -7,7 +7,10 @@
     "discord.js": "^12.1.1",
     "discord.js-commando": "^0.10.0",
     "node-opus": "^0.3.3",
-    "ytdl-core": "^2.0.1"
+    "opusscript": "0.0.7",
+    "simple-youtube-api": "^5.2.1",
+    "ytdl-core": "^2.0.1",
+    "ytdl-core-discord": "^1.1.0"
   },
   "devDependencies": {
     "eslint": "^6.8.0",
