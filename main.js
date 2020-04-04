@@ -25,7 +25,7 @@ client.on('message', message=> {
         message.channel.send(`\`\`\`Closing..\`\`\``);
         process.exit();
     }
-    else if(message.contentstartsWith(prefix + 'code')) {
+    else if(message.content.startsWith(prefix + 'code')) {
         if (message.author.id !== ownerID) return;
         try {
             const code = args.join(" ");
