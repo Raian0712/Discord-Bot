@@ -1,4 +1,6 @@
 //Discord API
+"use strict";
+
 const Discord = require('discord.js');
 const { prefix, ownerID } = require('./config.json');
 const client = new Discord.Client();
@@ -41,12 +43,10 @@ client.on('message', message=> {
 });
 
 function clean(text) {
-    if (typeof(text) === "string") {
+    if (typeof(text) === "string")
         return text.replace(/`/g, "`" + String.fromCharCode(8203)).replace(/@/g, "@" + String.fromCharCode(8203));
-    }
-    else {
+    else
         return text;
-    }
-}
+  }
 
 client.login(process.env.TOKEN);
