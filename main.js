@@ -9,16 +9,7 @@
 const Discord = require('discord.js');
 const {prefix, ownerID} = require('./config.json');
 const client = new Discord.Client();
-const console = {
-    embed: true,
-    image: '',
-    message: '',
-    code_block: true,
-    colour: 11395071,
-    title: 'Output:',
-    buffer: '',
-    log: (input) => console.buffer += (input + '\n'),
-};
+
 
 
 client.on('ready', () => {
@@ -40,11 +31,21 @@ client.on('message', async (message)=> {
 	} else if (message.content.startsWith(prefix + 'code')) {
 		if (message.author.id !== ownerID) return;
 		try {
-			const code = args.join(' ');
+            const code = args.join(' ');
+            const console = {
+                embed: true,
+                image: '',
+                message: '',
+                code_block: true,
+                colour: 11395071,
+                title: 'Output:',
+                buffer: '',
+                log: (input) => console.buffer += (input + '\n'),
+            };
             let evaled = await eval(code);
             const returned = await eval(`(async () => {${code}})()`);
             const consoleEmbed = new Discord.MessageEmbed()
-                .setTitle('Output')
+                .setTitle(console.title)
                 .setColor(console.colour)
                 .setTimestamp()
                 .setDescription(`\`\`\` ${(clean(evaled))} \`\`\``)
@@ -58,8 +59,10 @@ client.on('message', async (message)=> {
             // message.channel.send(clean(evaled), {code: 'xl'});
             message.channel.send(consoleEmbed);
             console.log('Output: ' + (clean(evaled)));
+            console.buffer = '';
 		} catch (error) {
-			message.channel.send(`\`ERROR\` \`\`\`xl\n${clean(error)}\n\`\`\``);
+            message.channel.send(`\`ERROR\` \`\`\`xl\n${clean(error)}\n\`\`\``);
+            console.buffer = '';
 		}
 	}
 });
