@@ -48,7 +48,7 @@ client.on('message', async (message)=> {
                 .setTitle(console.title)
                 .setColor(console.colour)
                 .setTimestamp()
-                .setDescription(`\`\`\` js ${(console.buffer)} \`\`\``)
+                .setDescription('```js\n' + `${(console.buffer)}` + '```')
                 .addFields(
                     {name: 'Returned', value: returned},
                 );
@@ -58,7 +58,7 @@ client.on('message', async (message)=> {
 			}
             // message.channel.send(clean(evaled), {code: 'xl'});
             message.channel.send(consoleEmbed);
-            console.log('Output: ' + (clean(evaled)));
+            // console.log('Output: ' + (clean(evaled)));
             console.buffer = '';
 		} catch (error) {
             message.channel.send(`\`ERROR\` \`\`\`xl\n${clean(error)}\n\`\`\``);
