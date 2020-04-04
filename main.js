@@ -40,6 +40,7 @@ client.on('message', async (message)=> {
                 buffer: '',
                 log: (input) => console.buffer += (input + '\n'),
             };
+            let evaled;
             const returned = await eval(`(async () => {${code}})()`);
             const consoleEmbed = new Discord.MessageEmbed()
                 .setTitle(console.title)
@@ -51,7 +52,7 @@ client.on('message', async (message)=> {
                 );
 
 			if (typeof returned !== 'string') {
-				returned = require('util').inspect(returned);
+				evaled = require('util').inspect(returned);
 			}
             // message.channel.send(clean(returned), {code: 'xl'});
             message.channel.send(consoleEmbed);
