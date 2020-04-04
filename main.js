@@ -47,21 +47,17 @@ client.on('message', async (message)=> {
                 .setTitle('Output')
                 .setColor(console.colour)
                 .setTimestamp()
-                .setDescription(`\`\`\` ${(clean(evaled), {code: 'js'})} \`\`\``)
+                .setDescription(`\`\`\` ${(clean(evaled))} \`\`\``)
                 .addFields(
                     {name: 'Returned', value: returned},
                 );
 
-			// Run time
-			const hrStart = process.hrtime();
-			const hrDiff = process.hrtime(hrStart);
-
 			if (typeof evaled !== 'string') {
 				evaled = require('util').inspect(evaled);
 			}
-            message.channel.send(`*Executed in ${hrDiff[0] > 0 ? `${hrDiff[0]}s` : ''}${hrDiff[1] / 1000000}ms.*`);
             // message.channel.send(clean(evaled), {code: 'xl'});
             message.channel.send(consoleEmbed);
+            console.log('Output: ' + (clean(evaled)));
 		} catch (error) {
 			message.channel.send(`\`ERROR\` \`\`\`xl\n${clean(error)}\n\`\`\``);
 		}
