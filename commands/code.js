@@ -1,4 +1,5 @@
-const {ownerID} = require('./config.json');
+const Discord = require('discord.js');
+const {ownerID} = require('../config.json');
 const {inspect} = require('util');
 
 module.exports = {
@@ -40,5 +41,18 @@ module.exports = {
             message.channel.send(`\`ERROR\` \`\`\`xl\n${clean(error)}\n\`\`\``);
             console.buffer = '';
 		}
+	}
+}
+
+/**
+ * idk
+ * @param {string} text
+ * @return {string} output code
+ */
+function clean(text) {
+	if (typeof(text) === 'string') {
+		return text.replace(/`/g, '`' + String.fromCharCode(8203)).replace(/@/g, '@' + String.fromCharCode(8203));
+	} else {
+		return text;
 	}
 }
