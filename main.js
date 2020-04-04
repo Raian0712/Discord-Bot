@@ -47,7 +47,8 @@ client.on('message', async (message)=> {
                 .setColor(console.colour)
                 .setTimestamp()
                 .addFields(
-                    {name: 'Returned', value: (clean(evaled), {code: 'xl'})}
+                    {value: `\` ${clean(evaled)} \``},
+                    {name: 'Returned', value: ''}
                 );
 
 			// Run time
