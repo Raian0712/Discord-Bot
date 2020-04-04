@@ -6,10 +6,22 @@
 // Discord API
 'use strict';
 
+const fs = require('fs');
 const Discord = require('discord.js');
 const {prefix, ownerID} = require('./config.json');
 const {inspect} = require('util');
 const client = new Discord.Client();
+client.commands = new Discord.Collection();
+
+const commandFiles = fs.readdirSync('./commands').filter(file => file.endsWith('.js'));
+
+for(const file of commandFiles) {
+    const command = require(`./commands/${file}`);
+
+    // Set a new item in the collection
+    // with the key as the command name and the value as the exported module
+    client.commands.set(command.name, command);
+}
 
 client.on('ready', () => {
 	console.log(`Logged in as ${client.user.tag}!`);
@@ -18,10 +30,18 @@ client.on('ready', () => {
 client.on('message', async (message)=> {
 	const args = message.content.split(' ').slice(1);
 
-	if (!message.content.startsWith(prefix) || message.author.bot) return;
+    if (!message.content.startsWith(prefix) || message.author.bot) return;
+    
+    if (!client.commands.has(command)) return;
 
-	if (message.content.startsWith(prefix + 'ping')) {
-		message.channel.send('\`\`\`pong\`\`\`');
+    try {
+        client.commands.get(command).execute(message, args);
+    } catch (error) {
+        message.channel.send(`\`ERROR\` \`\`\`xl\n${clean(error)}\n\`\`\``);
+    }
+
+	/*if (message.content.startsWith(prefix + 'ping')) {
+		client.commands.get('ping').execute(message, args);
 	} else if (message.content.startsWith(prefix + 'user')) {
 		message.channel.send(`\`\`\`Your user name: ${message.author.username}\nYour ID: ${message.author.id}\`\`\``);
 	} else if (message.content.startsWith(prefix + 'close')) {
@@ -63,7 +83,7 @@ client.on('message', async (message)=> {
             message.channel.send(`\`ERROR\` \`\`\`xl\n${clean(error)}\n\`\`\``);
             console.buffer = '';
 		}
-	}
+	}*/
 });
 
 /**
