@@ -8,6 +8,7 @@
 
 const Discord = require('discord.js');
 const {prefix, ownerID} = require('./config.json');
+const {inspect} = require('util');
 const client = new Discord.Client();
 
 client.on('ready', () => {
@@ -52,7 +53,7 @@ client.on('message', async (message)=> {
                 );
 
 			if (typeof returned !== 'string') {
-				returned = require('util').inspect(returned);
+				returned = inspect(returned);
 			}
             // message.channel.send(clean(returned), {code: 'xl'});
             message.channel.send(consoleEmbed);
