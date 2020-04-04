@@ -19,13 +19,7 @@ const console = {
     buffer: '',
     log: (input) => console.buffer += (input + '\n'),
 }
-const consoleEmbed = new Discord.MessageEmbed()
-    .setTitle('Output')
-    .setColor(console.colour)
-    .setTimestamp()
-    .addFields(
-        {name: 'Returned', value: (clean(evaled), {code: 'xl'})}
-    );
+
 
 client.on('ready', () => {
 	console.log(`Logged in as ${client.user.tag}!`);
@@ -47,7 +41,14 @@ client.on('message', async (message)=> {
 		if (message.author.id !== ownerID) return;
 		try {
 			const code = args.join(' ');
-			let evaled = await eval(code);
+            let evaled = await eval(code);
+            const consoleEmbed = new Discord.MessageEmbed()
+                .setTitle('Output')
+                .setColor(console.colour)
+                .setTimestamp()
+                .addFields(
+                    {name: 'Returned', value: (clean(evaled), {code: 'xl'})}
+                );
 
 			// Run time
 			const hrStart = process.hrtime();
