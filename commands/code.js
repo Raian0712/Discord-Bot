@@ -1,7 +1,7 @@
 module.exports = {
 	name: 'code',
 	description: 'Coding sandbox.',
-	execute(message, args) {
+	async execute(message, args) {
 		if (message.author.id !== ownerID) return;
 		try {
             const code = args.join(' ');
