@@ -42,13 +42,14 @@ client.on('message', async (message)=> {
 		try {
 			const code = args.join(' ');
             let evaled = await eval(code);
+            const returned = await eval(`(async () => {${code}})()`);
             const consoleEmbed = new Discord.MessageEmbed()
                 .setTitle('Output')
                 .setColor(console.colour)
                 .setTimestamp()
                 .addFields(
-                    {value: `\` ${clean(evaled)} \``},
-                    {name: 'Returned', value: 'test'},
+                    {name: ' ', value: `\` ${(clean(evaled), {code: 'xl'})} \``},
+                    {name: 'Returned', value: returned},
                 );
 
 			// Run time
