@@ -1,3 +1,6 @@
+const {ownerID} = require('./config.json');
+const {inspect} = require('util');
+
 module.exports = {
 	name: 'code',
 	description: 'Coding sandbox.',

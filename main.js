@@ -8,8 +8,8 @@
 
 const fs = require('fs');
 const Discord = require('discord.js');
-const {prefix, ownerID} = require('./config.json');
-const {inspect} = require('util');
+const {prefix} = require('./config.json');
+
 const client = new Discord.Client();
 client.commands = new Discord.Collection();
 
