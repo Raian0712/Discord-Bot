@@ -29,6 +29,7 @@ client.on('message', message=> {
         if (message.author.id !== ownerID) return;
         try {
             const code = args.join(" ");
+            console.log("code = " + code);
             let evaled = eval(code);
 
             if(typeof evaled !== "string") {
