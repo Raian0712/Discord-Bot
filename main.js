@@ -28,7 +28,8 @@ client.on('ready', () => {
 });
 
 client.on('message', async (message)=> {
-	const args = message.content.split(' ').slice(1);
+    const args = message.content.split(' ').slice(1);
+    const command = args.shift().toLowerCase();
 
     if (!message.content.startsWith(prefix) || message.author.bot) return;
     
