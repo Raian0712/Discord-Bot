@@ -47,8 +47,8 @@ client.on('message', async (message)=> {
                 .setTitle('Output')
                 .setColor(console.colour)
                 .setTimestamp()
+                .setDescription(`\`\`\` ${(clean(evaled), {code: 'js'})} \`\`\``)
                 .addFields(
-                    {name: ' ', value: `\` ${(clean(evaled), {code: 'xl'})} \``},
                     {name: 'Returned', value: returned},
                 );
 
