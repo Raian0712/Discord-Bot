@@ -38,7 +38,7 @@ client.on('message', async (message)=> {
                 colour: 11395071,
                 title: 'Output:',
                 buffer: '',
-                log: (input) => console.buffer += (input + '\n'),
+                log: (input) => console.buffer += (inspect(input) + '\n'),
             };
             let evaled;
             let returned = await eval(`(async () => {${code}})()`);
