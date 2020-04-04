@@ -15,17 +15,17 @@ client.on('message', message=> {
 
     if (!message.content.startsWith(prefix) || message.author.bot) return;
 
-    if (message.content.startsWith(prefix + ping)) {
+    if (message.content.startsWith(prefix + 'ping')) {
         message.channel.send('\`\`\`pong\`\`\`');
     }
-    else if(message.content.startsWith(prefix + user)) {
+    else if(message.content.startsWith(prefix + 'user')) {
         message.channel.send(`\`\`\`Your user name: ${message.author.username}\nYour ID: ${message.author.id}\`\`\``);
     }
-    else if(message.content.startsWith(prefix + close)) {
+    else if(message.content.startsWith(prefix + 'close')) {
         message.channel.send(`\`\`\`Closing..\`\`\``);
         process.exit();
     }
-    else if(message.contentstartsWith(prefix + code)) {
+    else if(message.contentstartsWith(prefix + 'code')) {
         if (message.author.id !== ownerID) return;
         try {
             const code = args.join(" ");
