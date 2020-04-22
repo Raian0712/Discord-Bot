@@ -1,13 +1,17 @@
-const {ownerID} = require('./config.json');
+'use strict';
+const Discord = require('discord.js');
+const {ownerID} = require('../config.json');
 const {inspect} = require('util');
 
 module.exports = {
 	name: 'code',
-	description: 'Coding sandbox.',
+    description: 'Coding sandbox. Only the bot owner can use it.',
+    usage: '[```js\n\'code\'\n```]',
+    category: 'botOwner',
 	async execute(message, args) {
 		if (message.author.id !== ownerID) return;
 		try {
-            const code = args.join(' ');
+            const code = args.join(' ').replace(/^[ \n]*```(?:js|javascript)?\n([^]+)```$/, (found, code, index, input) => code);
             const console = {
                 embed: true,
                 image: '',
@@ -37,8 +41,21 @@ module.exports = {
             // console.log('Output: ' + (clean(returned)));
             console.buffer = '';
 		} catch (error) {
-            message.channel.send(`\`ERROR\` \`\`\`xl\n${clean(error)}\n\`\`\``);
+            message.channel.send(`\`ERROR\` \`\`\`xl\n${clean(error.stack)}\n\`\`\``);
             console.buffer = '';
 		}
+	}
+}
+
+/**
+ * idk
+ * @param {string} text
+ * @return {string} output code
+ */
+function clean(text) {
+	if (typeof(text) === 'string') {
+		return text.replace(/`/g, '`' + String.fromCharCode(8203)).replace(/@/g, '@' + String.fromCharCode(8203));
+	} else {
+		return text;
 	}
 }
