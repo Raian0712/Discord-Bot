@@ -3,6 +3,9 @@
   "version": "1.0.0",
   "description": "",
   "main": "main.js",
+  "engines": {
+	"node": "12.16.x"
+  },
   "dependencies": {
     "booru": "^2.2.3",
     "discord.js": "^12.1.1",
