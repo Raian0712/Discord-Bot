@@ -32,14 +32,35 @@ client.on('message', async (message)=> {
     const args = message.content.split(' ').slice(1);
     const command = message.content.slice(prefix.length).split(/ +/).shift().toLowerCase();
 
-    if (!message.content.startsWith(prefix) || message.author.bot) return;
+    let prefixes = JSON.parse(fs.readFileSync("./prefixes.json", "utf8"));
+
+    if(!prefixes[message.guild.id]) {
+        prefixes[message.guild.id] = {
+            prefixes: prefix
+        }
+    }
+
+    var botPrefix = prefixes[message.guild.id].prefixes;
+
+    const prefixEmbed = new Discord.MessageEmbed()
+        .setTitle("Prefix")
+        .setColor(message.member.displayHexColor)
+        .setDescription(`Current prefix is ${botPrefix}.`)
+        .setTimestamp();
+    
+
+    if(message.content == 'prefix') {
+        message.channel.send(prefixEmbed);
+    }
+
+    if (!message.content.startsWith(botPrefix) || message.author.bot) return;
     
     if (!client.commands.has(command)) return;
 
     try {
         client.commands.get(command).execute(message, args);
     } catch (error) {
-        message.channel.send(`\`ERROR\` \`\`\`xl\n${error}\n\`\`\``);
+        message.channel.send(`\`ERROR\` \`\`\`xl\n${error.stack}\n\`\`\``);
     }
 
 	

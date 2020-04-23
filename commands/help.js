@@ -1,5 +1,6 @@
 const Discord = require('discord.js');
 const {prefix} = require('../config.json');
+const fs = require('fs');
 
 module.exports = {
     name: 'help',
@@ -13,6 +14,16 @@ module.exports = {
         const musicCommands = [];
         const imageCommands = [];
         const botOwnerCommands = [];
+
+        let prefixes = JSON.parse(fs.readFileSync("./prefixes.json", "utf8"));
+
+        if(!prefixes[message.guild.id]) {
+            prefixes[message.guild.id] = {
+                prefixes: prefix
+            }
+        }
+
+        var botPrefix = prefixes[message.guild.id].prefixes;
 
         await commands.map(command => {
             if (command.category == 'general') {
@@ -30,7 +41,7 @@ module.exports = {
             .setTitle('Help Menu')
             .setColor(message.member.displayHexColor)
             .setTimestamp()
-            .setDescription(`Here\'s a list of all my commands.\nYou can send \`${prefix}help [command name]\` to get info on a specific command!`)
+            .setDescription(`Here\'s a list of all my commands.\nYou can send \`${botPrefix}help [command name]\` to get info on a specific command!`)
             .addFields({
                 name: 'General',
                 value: `\`\`\`${generalCommands.join(', ')}\`\`\``
@@ -60,7 +71,7 @@ module.exports = {
 
         if (command.aliases) data.push(`**Aliases:** ${command.aliases.join(', ')}`);
         if (command.description) data.push(`**Description:** ${command.description}`);
-        if (command.usage) data.push(`**Usage:** ${prefix}${command.name} ${command.usage}`);
+        if (command.usage) data.push(`**Usage:** ${botPrefix}${command.name} ${command.usage}`);
 
         //data.push(`**Cooldown:** ${command.cooldown || 3} second(s)`);
 

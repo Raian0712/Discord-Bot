@@ -11,7 +11,7 @@ module.exports = {
             console.log(args);
             message.client.user.setPresence({
                 activity: {
-                    name: args.join(' ')
+                    name: args.join(' '),
                 },
                 status: 'online'
             }).then(message.channel.send("Done."))
