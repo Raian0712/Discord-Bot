@@ -5,14 +5,14 @@ const {
 const Booru = require('booru');
 const db = Booru.forSite('db');
 const channels = {};
-var time = 1 * 60 * 1000;
-var timeMinute;
+var time = 1000;
+var timeSecond;
 var channel;
 
 module.exports = {
     name: 'autopic',
     description: 'Automatically searches image in danbooru and posts here. Can be filtered by adding paramters at the end. Default on safe.',
-    usage: '[danbooru tag] [-safe, -suggestive, -nsfw] [time in minute]',
+    usage: '[danbooru tag (* if everything)] [-safe, -suggestive, -nsfw] [time in seconds (add m in the end for minutes)]',
     category: 'image',
     async execute(message, args) {
         if(!channels[message.channel.id]) {
@@ -22,7 +22,8 @@ module.exports = {
             };
         }
 
-        time = 1 * 60 * 1000;
+        time = 1000;
+        var timeMinute;
         
         if (args[0] != 'stop') {
             if (args[1] == undefined || args[1] == null) {
@@ -41,19 +42,40 @@ module.exports = {
             console.log(args[2]);
 
             if (args[2] == undefined || args[2] == null) {
-                timeMinute = 20;
+                timeSecond = 20;
             } else if (Number.isInteger(parseInt(args[2]))) {
-                timeMinute = args[2];
+                timeSecond = parseInt(args[2]);
+                if(args[2].includes('m')) {
+                    timeSecond *= 60;
+                }
             } else {
                 return message.channel.send("Invalid time input.");
             }
 
-            time = time * timeMinute;
+            time = time * timeSecond;
+
+            if (timeSecond > 60) {
+                timeMinute = Math.floor(time / 60 / 1000);
+            }
+            
+            if (timeMinute) {
+                timeSecond = Math.floor(time % 60);
+            }
 
             channel = channels[message.channel.id];
 
             if (!channels[message.channel.id].interval) {
-                message.channel.send(`Auto pics initialized. Wait for ${time / 60000} minute(s) for the following pictures.\nTo stop, type \`${prefix}autopic stop\``);
+                var string = "Auto pics initialized. Wait for ";
+                if (timeMinute) {
+                    string += `${timeMinute} minute(s) `;
+                }
+                if (timeSecond) {
+                    string += `${timeSecond} second(s) `;
+                }
+
+                string += `for the following pictures.\nTo stop, type \`${prefix}autopic stop\``
+
+                message.channel.send(string);
                 //searchPic(message, args);
                 channels[message.channel.id].interval = setTimeout(async () => {
                     await sendPic(channels[message.channel.id], message, args)
