@@ -4,7 +4,7 @@
   "description": "",
   "main": "main.js",
   "engines": {
-	"node": "12.16.x"
+    "node": "12.16.x"
   },
   "dependencies": {
     "booru": "^2.2.3",
@@ -15,7 +15,7 @@
     "opusscript": "0.0.7",
     "scrape-youtube": "0.0.9",
     "simple-youtube-api": "^5.2.1",
-	"waifu2x": "^0.1.5",
+    "waifu2x": "^0.1.5",
     "ytdl-core": "^2.0.1",
     "ytdl-core-discord": "^1.1.0"
   },
