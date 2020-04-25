@@ -27,16 +27,18 @@ module.exports = {
         
         if (args[0] != 'stop') {
             if (args[1] == undefined || args[1] == null) {
-                message.channel.send("Search parameters did not initialized. Setting to safe by default..");
-                channels[message.channel.id].searchString = 'rating:safe';
+                message.channel.send("Search parameters did not initialized. Setting to all by default..");
+                channels[message.channel.id].searchString = '';
             } else if (args[1] == '-safe') {
                 channels[message.channel.id].searchString = 'rating:safe';
             } else if (args[1] == '-suggestive') {
                 channels[message.channel.id].searchString = 'rating:questionable';
             } else if (args[1] == '-nsfw') {
                 channels[message.channel.id].searchString = 'rating:explicit';
+            } else if (args[1] == 'all') {
+                channels[message.channel.id].searchString = '';
             } else {
-                return message.channel.send("Invalid search parameter at the end. (-safe, -suggestive, -nsfw)");
+                return message.channel.send("Invalid search parameter at the end. (-safe, -suggestive, -nsfw, -all)");
             }
 
             console.log(args[2]);
