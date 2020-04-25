@@ -35,7 +35,7 @@ module.exports = {
                 channels[message.channel.id].searchString = 'rating:questionable';
             } else if (args[1] == '-nsfw') {
                 channels[message.channel.id].searchString = 'rating:explicit';
-            } else if (args[1] == 'all') {
+            } else if (args[1] == '-all') {
                 channels[message.channel.id].searchString = '';
             } else {
                 return message.channel.send("Invalid search parameter at the end. (-safe, -suggestive, -nsfw, -all)");
@@ -126,6 +126,10 @@ async function sendPic(channel, message, args) {
 
         youTubeEmbed.setDescription(post.postView);
 
+        console.log(`preview url: ${post.previewUrl}`);
+        console.log(`sameple url: ${post.sampleUrl}`);
+        console.log(`file url: ${post.fileUrl}`);
+
         url = post.sampleUrl;
         if (url == null) {
             url = post.fileUrl;
@@ -133,6 +137,8 @@ async function sendPic(channel, message, args) {
 
         if (url != null) {
             youTubeEmbed.setImage(url);
+        } else {
+            youTubeEmbed.setDescription(`${post.postView}\nCannot grab thumbnail from danbooru.. Eh..\nEither the post was deleted or it needs gold account to view.`);
         }
 
         message.channel.send(youTubeEmbed);
