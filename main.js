@@ -9,6 +9,7 @@
 const fs = require('fs');
 const Discord = require('discord.js');
 const {prefix, token} = require('./config.json');
+const serversRadio = {};
 
 const client = new Discord.Client();
 client.commands = new Discord.Collection();
@@ -40,6 +41,12 @@ client.on('message', async (message)=> {
         }
     }
 
+    if (!serversRadio[message.guild.id]) {
+        serversRadio[message.guild.id] = {
+            radio: false
+        }
+    }
+
     var botPrefix = prefixes[message.guild.id].prefixes;
 
     const prefixEmbed = new Discord.MessageEmbed()
@@ -66,7 +73,23 @@ client.on('message', async (message)=> {
     if (!client.commands.has(command)) return;
 
     try {
-        client.commands.get(command).execute(message, args);
+        if(command == 'gradio') {
+            serversRadio[message.guild.id].radio = true;
+            client.commands.get(command).execute(message, args);
+        } else if ((command == 'addqueue' || command == 'play') && serversRadio[message.guild.id].radio) {
+            message.channel.send("Gensokyo Radio is already playing.");
+        } else if (command == 'leave') {
+            client.commands.get(command).execute(message, args);
+            if (serversRadio[message.guild.id].radio) {
+				message.channel.send("Stopping Gensokyo Radio..");
+			} else {
+				message.channel.send("Stopping music..");
+            }
+            serversRadio[message.guild.id].radio = false;
+        } else {
+            client.commands.get(command).execute(message, args);
+        }
+        
     } catch (error) {
         message.channel.send(`\`ERROR\` \`\`\`xl\n${error.stack}\n\`\`\``);
     }
