@@ -32,6 +32,7 @@ client.on('message', async (message)=> {
     //guild = message.guild;
     const args = message.content.split(' ').slice(1);
     const command = message.content.slice(prefix.length).split(/ +/).shift().toLowerCase();
+    //var interval;
 
     let prefixes = JSON.parse(fs.readFileSync("./prefixes.json", "utf8"));
 
@@ -75,13 +76,15 @@ client.on('message', async (message)=> {
     try {
         if(command == 'gradio') {
             serversRadio[message.guild.id].radio = true;
-            client.commands.get(command).execute(message, args);
+            await client.commands.get(command).execute(message, args);
+
         } else if ((command == 'addqueue' || command == 'play') && serversRadio[message.guild.id].radio) {
             message.channel.send("Gensokyo Radio is already playing.");
         } else if (command == 'leave') {
             client.commands.get(command).execute(message, args);
             if (serversRadio[message.guild.id].radio) {
-				message.channel.send("Stopping Gensokyo Radio..");
+                message.channel.send("Stopping Gensokyo Radio..");
+                //clearInterval(interval);
 			} else {
 				message.channel.send("Stopping music..");
             }

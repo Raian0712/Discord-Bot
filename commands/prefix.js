@@ -6,7 +6,7 @@ module.exports = {
     name: 'prefix',
     description: 'Changes prefix of the bot.',
     usage: '[new prefix]',
-    category: 'botOwner',
+    category: 'general',
     async execute(message, args) {
         if(!message.member.hasPermission("MANAGE_GUILD")) {
             return message.reply("not enough permision. Need at least manage server permissions.");

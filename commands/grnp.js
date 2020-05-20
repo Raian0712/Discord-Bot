@@ -2,11 +2,12 @@ const Discord = require('discord.js');
 var xml2js = require('xml2js');
 var https = require('https');
 var parser = new xml2js.Parser();
-var songTitle;
-var songArtist;
-var songAlbum;
-var songYear;
-var songCircle;
+var songTitle = '';
+var songArtist = '';
+var songAlbum = '';
+var songYear = '';
+var songCircle = '';
+var newSongTitle, newSongArtist, newSongAlbum, newSongYear, newSongCircle;
 
 module.exports = {
     name: 'grnp',
@@ -14,7 +15,7 @@ module.exports = {
     usage: '',
     category: 'music',
     async execute(message, args) {
-        const connection = await message.member.voice.channel.join();
+        //const connection = await message.member.voice.channel.join();
 
         if (!message.member.voice.channel) {
             message.channel.send('User is not in voice channel! I don\'t know what to play either!');
@@ -36,7 +37,7 @@ module.exports = {
                         if (err) {
                             console.log(err.stack);
                         } else {
-                            console.log(res.GENSOKYORADIODATA.SONGINFO[0]);
+                            //console.log(res.GENSOKYORADIODATA.SONGINFO[0]);
                             songTitle = decodeEntities(res.GENSOKYORADIODATA.SONGINFO[0].TITLE.join());
                             songArtist = decodeEntities(res.GENSOKYORADIODATA.SONGINFO[0].ARTIST.join());
                             songAlbum = decodeEntities(res.GENSOKYORADIODATA.SONGINFO[0].ALBUM.join());
@@ -64,16 +65,57 @@ module.exports = {
                             songCircle = 'Unknown';
                         }
 
-                        const youTubeEmbed = new Discord.MessageEmbed()
-                            .setTitle("Now playing")
-                            .setColor("#5b64a7")
-                            .setTimestamp()
-                            .setDescription(`**${songArtist} - ${songTitle}**\n`)
-                            .addField('Album', songAlbum)
-                            .addField('Year', songYear)
-                            .addField('Circle', songCircle);
+                        //console.log(args);
+                        //console.log(songTitle);
+                        //console.log(newSongTitle);
+                        if (songTitle != newSongTitle && args == 'auto') {
+                            newSongTitle = songTitle;
+                            newSongArtist = songArtist;
+                            newSongAlbum = songAlbum;
+                            newSongYear = songYear;
+                            newSongCircle = songCircle;
 
-                        message.channel.send(youTubeEmbed);
+                            const youTubeEmbed = new Discord.MessageEmbed();
+
+                            //When they play intermission displays only intermission, else display song info
+                            if (newSongTitle == 'Intermission') {
+                                youTubeEmbed.setTitle("Now playing")
+                                    .setColor("#5b64a7")
+                                    .setTimestamp()
+                                    .setDescription(`**${newSongTitle}**\n`);
+                            } else {
+                                youTubeEmbed.setTitle("Now playing")
+                                    .setColor("#5b64a7")
+                                    .setTimestamp()
+                                    .setDescription(`**${newSongArtist} - ${newSongTitle}**\n`)
+                                    .addField('Album', newSongAlbum)
+                                    .addField('Year', newSongYear)
+                                    .addField('Circle', newSongCircle);
+                            }
+
+                            message.channel.send(youTubeEmbed);
+                        } else if (args != 'auto') {
+                            const youTubeEmbed = new Discord.MessageEmbed();
+
+                            if (newSongTitle == 'Intermission') {
+                                youTubeEmbed.setTitle("Now playing")
+                                    .setColor("#5b64a7")
+                                    .setTimestamp()
+                                    .setDescription(`**${songTitle}**\n`);
+                            } else {
+                                youTubeEmbed.setTitle("Now playing")
+                                    .setColor("#5b64a7")
+                                    .setTimestamp()
+                                    .setDescription(`**${songArtist} - ${songTitle}**\n`)
+                                    .addField('Album', songAlbum)
+                                    .addField('Year', songYear)
+                                    .addField('Circle', songCircle);
+                            }
+                            
+                            message.channel.send(youTubeEmbed);
+                        }
+
+                        
                     });
                 });
             }

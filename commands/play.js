@@ -4,8 +4,10 @@ const ytdl = require('ytdl-core-discord');
 const {youtubeAPI} = require('../config.json');
 const youtube = new Youtube(youtubeAPI);
 let {servers} = require('../commands/addqueue.js');
+let addqueue = require('../commands/addqueue.js');
 let server;
 var highWaterMark = 10485760;
+//let playing = false;
 
 module.exports = {
     name: 'play',
@@ -14,7 +16,7 @@ module.exports = {
     category: 'music',
     async execute(message, args) {
         if(!message.member.voice.channel) {
-            message.channel.send('User is not in voice channel! How am I supposed to play?');
+            return message.channel.send('User is not in voice channel! How am I supposed to play?');
         }
         const connection = await message.member.voice.channel.join();
 
@@ -24,45 +26,76 @@ module.exports = {
                 queue: []
             }
         }
+
+        if (args.join(' ')) {
+            message.channel.send("Please use addqueue to search for videos for now, testing purposes");
+        }
     
         server = servers[message.guild.id];
+
+        //await addqueue.execute(message, args);
         
-        play(message, connection, server.queue);
+        //if (!playing) {
+        play(message, connection);
+        //}
     }
 }
 
-async function play(message, connection, queue) {
+async function play(message, connection) {
+    //playing = true;
     const youTubeEmbed = new Discord.MessageEmbed()
                 .setTitle("Video played")
                 .setColor("#ff0000")
                 .setTimestamp();
-    if (queue.length >= 1) {
+
+    const statusEmbed = new Discord.MessageEmbed();
+
+    let embedMessage;
+
+    if (servers[message.guild.id].queue.length >= 1) {
         //console.log(queue);
-        const dispatcher = connection.play(await ytdl(queue[0].url), {
-            filter: "audioonly",
-            type: 'opus',
-            highWaterMark: highWaterMark,
-        });
+        console.log(servers[message.guild.id].queue[0].url);
+        let dispatcher;
+        
+        if(servers[message.guild.id].queue[0].url) {
+            dispatcher = connection.play(await ytdl(servers[message.guild.id].queue[0].url), {
+                filter: "audioonly",
+                type: 'opus',
+                highWaterMark: highWaterMark,
+            });
+    
+            youTubeEmbed.setDescription(`**Now Playing:**\n\n**${servers[message.guild.id].queue[0].title}**\n${servers[message.guild.id].queue[0].url}`);
+            youTubeEmbed.setThumbnail(servers[message.guild.id].queue[0].thumbnail);
+            youTubeEmbed.addField('Views', servers[message.guild.id].queue[0].views, true);
+            youTubeEmbed.addField('Duration', servers[message.guild.id].queue[0].duration, true);
+            youTubeEmbed.addField('_ _', '_ _', false);
+            youTubeEmbed.addField('Uploaded At', servers[message.guild.id].queue[0].uploaded_at, true);
+            youTubeEmbed.addField('Channel', servers[message.guild.id].queue[0].channel, true);
 
-        youTubeEmbed.setDescription(`**Now Playing:**\n\n**${queue[0].title}**\n${queue[0].url}`);
-        youTubeEmbed.setThumbnail(queue[0].thumbnail);
-
-        message.channel.send("Grabbing video from queue to play..");
+            statusEmbed.setDescription("Playing video in queue..");
+    
+            message.channel.send(statusEmbed);
+        } else {
+            return message.channel.send("Something went wrong.");
+        }
 
         dispatcher.on('start', () => {
             message.channel.send(youTubeEmbed);
         });
         
         dispatcher.on('finish', async () => {
-            if(server.queue.length >= 1) {
-                message.channel.send("Video Finished playing. Loading next video to play..");
+            if(servers[message.guild.id].queue.length >= 1) {
+                statusEmbed.setDescription("Video Finished playing. Loading next video to play..");
+                embedMessage = await message.channel.send(statusEmbed);
             }
             
-            server.queue.shift();
-            if(server.queue.length < 1){
-                message.channel.send("Queue has stopped playing.");
+            servers[message.guild.id].queue.shift();
+            if(servers[message.guild.id].queue.length < 1){
+                statusEmbed.setDescription('Queue has stopped playing.');
+                embedMessage.edit(statusEmbed);
+                //playing = false;
             } else {
-                play(message, connection, server.queue);
+                play(message, connection);
             }
         });
 

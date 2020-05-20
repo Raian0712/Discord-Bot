@@ -12,8 +12,8 @@ module.exports = {
     category: 'music',
     async execute(message, args) {
         const connection = await message.member.voice.channel.join();
-        let url = args.join(' ');
-        if((connection == null || connection == undefined)/*  || connection.voice.speaking != null || !connection.voice.speaking*/) {
+        //let url = args.join(' ');
+        if((!connection)/*  || connection.voice.speaking != null || !connection.voice.speaking*/) {
             message.member.voice.channel.leave();
             return message.channel.send("The bot is not playing any music!");
         }
@@ -21,9 +21,10 @@ module.exports = {
             return message.channel.send("Invalid volume! Please enter a range from 0.00 to 1.00 only.");
         }
 
-        let volume = args * 100;
-        
+        //let volume = args * 100;
 
         connection.dispatcher.setVolume(args);
+
+        console.log('Volume set');
     }
 }
