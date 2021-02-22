@@ -59,14 +59,6 @@ client.on('message', async (message)=> {
 
     if(message.content == 'prefix') {
         message.channel.send(prefixEmbed);
-    } else if (message.content == 'eh' || message.content == 'eh?') {
-        const ehEmbed = new Discord.MessageEmbed()
-            .setTitle('Eh???')
-            .setImage('https://cdn.discordapp.com/attachments/488924381112827914/702871878557237359/eh.gif')
-            .setTimestamp()
-            .setColor(message.member.displayHexColor);
-
-        message.channel.send(ehEmbed);
     }
 
     if (!message.content.startsWith(botPrefix) || message.author.bot) return;
